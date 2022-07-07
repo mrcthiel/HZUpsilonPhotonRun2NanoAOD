@@ -85,3 +85,10 @@ forward_events.register_sequence(
 forward_events.register_sequence(
     FilterSequence("mass_selection", mass_selection_filter)
 )
+
+forward_events.register_sequence(ObjectSequence("probe_muon", build_probe_muon))
+forward_events.register_sequence(ObjectSequence("tag_muon", build_tag_muon))
+forward_events.register_sequence(ObjectSequence("probe_photon", build_probe_photon))
+forward_events.register_sequence(ObjectSequence("TrigObjs", build_TrigObjs))
+
+

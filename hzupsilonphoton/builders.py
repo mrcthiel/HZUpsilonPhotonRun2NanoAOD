@@ -1,8 +1,72 @@
 import awkward as ak
 import numpy as np
+import math as ma
 
 from hzupsilonphoton.events import Events
 
+
+def build_probe_muon(evts: Events) -> ak.Array:
+    nmuons_filter = ak.num(evts.events.Muon) >= 2  # at least 2 muons
+    muon_pt_filter = False
+    if evts.year==2016
+        muon_pt_filter = evts.events.Muon.pt > 29  # minimum muon pt
+    if evts.year==2017
+        muon_pt_filter = evts.events.Muon.pt > 26  # minimum muon pt
+    if evts.year==2016
+        muon_pt_filter = evts.events.Muon.pt > 29  # minimum muon pt
+    muon_eta_filter = np.absolute(evts.events.Muon.eta) < 2.4  # |eta| < 2.4
+    muon_id_filter = evts.events.Muon.mediumPromptId == 1  # muon id: mediumPromptId   ## check it
+    iso_muon_filter = evts.events.Muon.pfRelIso03_all < 0.15  # PF_Isolation < 0.15    ## check it
+    return evts.events.Muon[
+        nmuons_filter
+        & muon_eta_filter
+        & muon_pt_filter
+        & muon_id_filter
+        & iso_muon_filter
+    ]
+
+def build_tag_muon(evts: Events) -> ak.Array:
+    n_probe_muons_filter = ak.num(evts.events.probe_muon) >= 2  # at least 2 muons
+    muon_pt_filter = False
+    if evts.year==2016
+        muon_pt_filter = evts.events.Muon.pt > xx  # minimum muon pt
+    if evts.year==2017
+        muon_pt_filter = evts.events.Muon.pt > xx  # minimum muon pt
+    if evts.year==2016
+        muon_pt_filter = evts.events.Muon.pt > xx  # minimum muon pt
+    muon_eta_filter = np.absolute(evts.events.Muon.eta) < 2.4  # |eta| < 2.4
+    muon_id_filter = evts.events.Muon.mediumPromptId == 1  # muon id: mediumPromptId   ## check it
+    iso_muon_filter = evts.events.Muon.pfRelIso03_all < 0.15  # PF_Isolation < 0.15    ## check it
+    return evts.events.Muon[
+        n_probe_muons_filter
+        & muon_eta_filter
+        & muon_pt_filter
+        & muon_id_filter
+        & iso_muon_filter
+    ]
+
+def build_probe_photon(evts: Events) -> ak.Array:
+    nphotons_filter = ak.num(evts.events.Photon) >= 1  # at lest one photon
+    photon_pt_filter = False
+    if evts.year==2016
+        photon_pt_filter = evts.events.Photon.pt > xx  # minimum photon pt
+    if evts.year==2017
+        photon_pt_filter = evts.events.Photon.pt > xx  # minimum photon pt
+    if evts.year==2016
+        photon_pt_filter = evts.events.Photon.pt > xx  # minimum photon pt
+    photon_eta_filter = np.absolute(evts.events.Photon.eta) < xx  # |eta| < 2.4
+    photon_id_filter = evts.events.Photon.mediumPromptId == xx  # photon id: mediumPromptId   ## check it
+    iso_photon_filter = evts.events.Photon.pfRelIso03_all < xx  # PF_Isolation < 0.15    ## check it
+    return evts.events.Photon[
+        nphotons_filter
+        & photon_eta_filter
+        & photon_pt_filter
+        & photon_id_filter
+        & iso_photon_filter
+    ]
+
+def build_TrigObjs(evts: Events) -> ak.Array: #separar em 3?
+    return evts.events.TrigObj
 
 def build_good_muons(evts: Events) -> ak.Array:
     nmuons_filter = ak.num(evts.events.Muon) >= 2  # at least 2 muons
@@ -40,7 +104,6 @@ def build_good_photons(evts: Events) -> ak.Array:
         & photon_tight_id_filter
     ]
 
-
 def build_dimuons(evts: Events) -> ak.Array:
     dimuons = ak.combinations(evts.events.good_muons, 2)
     dimuons = dimuons[(dimuons["0"].charge + dimuons["1"].charge == 0)]
@@ -49,7 +112,7 @@ def build_dimuons(evts: Events) -> ak.Array:
 
 
 def build_bosons_combination(evts: Events) -> ak.Array:
-    bosons = ak.cartesian(
+    bosons = ak.cartesian( # comina√oes
         [
             evts.events.dimuons,
             evts.events.good_photons,
